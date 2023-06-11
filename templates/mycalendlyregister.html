@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>please register in my calendly site to schedule your appointments.<br>
+create an event and put the link in the link input. </p>
+<a href="https://calendly.com" target="_blank">Click here</a>
+<p>get the link and write it here</p>
+<form method="POST" action="">
+    {% csrf_token %}
+link:<input type="text" name ="Therapist_link"/>
+<input type="submit" value="submit">
+
+</form>
+<a href="{% url 'mycalendly' user %}">check your calendly</a>
+
+</body>
+</html>
