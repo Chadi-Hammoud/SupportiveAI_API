@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <title>Title</title>
+    <style>
+        body {
+            background-color: #f9f8fd;
+            color: #990099;
+            display: block;
+            
+          
+        
+        }
+        
+        form {
+            margin-top: 20px;
+        }
+
+input{
+ border-radius: 25px;
+  background: white;
+  width:250px;
+  height:40px;
+  color:#990099;
+font-size:15px;
+font-family:Garamond;
+text-align:center;
+
+  
+}
+
+button{
+
+ border-radius: 25px;
+  background: white;
+  width:110px;
+  height:30px;
+  color:#990099;
+font-size:15px;
+font-family:Garamond;
+
+  
+
+}
+
+.center {
+  margin: auto;
+  margin-top: 10%;
+  text-align: center;
+  width: 60%;
+  height: 300px;
+  border: 3px solid #990099;
+  padding: 10px;
+}
+</style>
+</head>
+<body>
+    <div class="center">
+<form method="POST" action="">
+    <h2>Enter the code sent to your email</h2><br> 
+{% csrf_token %}
+<input type="text" placeholder="Enter your code" name="code"/><br> <br> <br> 
+<button type="submit" class="btn btn-primary">Submit</button><br> 
+
+</form>
+</div>
+</body>
+</html>
