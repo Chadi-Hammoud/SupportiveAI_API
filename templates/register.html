@@ -1,55 +1,86 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
-  .input-icons i {
-            position: absolute;
-        }
-          
-        .input-icons {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-          
-        .icon {
-            padding: 10px;
-            min-width: 40px;
-            color:#1a9940
-        }
-          
-        .input-field {
-            width: 100%;
-            padding: 10px;
-            text-align: center;
-        }
-        select, input[type=date] {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
+ body{
+  background-image: url("{% static 'images/wallp.png' %}");
+  background-repeat: no-repeat;
+  background-attachment: fixed;  
+  background-size: cover;
+  
+}
+
+* {
   box-sizing: border-box;
 }
 
-button[type=submit] {
-  background-color: #04AA6D;
-  color: white;
-  padding: 14px 20px;
-  margin-top: 10px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
+
+.column {
+margin-top:50px;
+margin-left:50px;
+margin-right:50px;
+margin-bottom:50px;
+
+  float: left;
+  width: 300px;
+  padding: 10px;
+  height:700px;
+   border-radius: 25px;
+
 }
 
-button[type=submit]:hover {
-  opacity: 0.8;
+input{
+  border-radius: 25px;
+  background: white;
+   height:30px;
+text-align: center;
+color:#990099;
+font-size:15px;
+font-family:Garamond;
+width:200px;
+border-color: #920592;
+border-width: 2px;
 }
-body {font-family: Arial, Helvetica, sans-serif;}
-* {box-sizing: border-box;}
 
+
+button{
+margin-right:55px;
+float:right;
+ border-radius: 25px;
+  background: white;
+  width:113px;
+  height:30px;
+  color:#990099;
+font-size:15px;
+font-family:Garamond;
+border-width: 2px;
+border-color: #920592;
+
+
+  
+
+}
+
+
+.form{
+  margin-top:60px;
+  text-align: center;
+}
+select{
+  border-radius: 25px;
+  background: white;
+   height:30px;
+text-align: center;
+color:#990099;
+font-size:15px;
+font-family:Garamond;
+border-width: 2px;
+width:200px;
+
+border-color: #920592;
+}
 
   /* Set a grey background color and center the text of the "sign in" section */
   .signin {
@@ -61,65 +92,47 @@ body {font-family: Arial, Helvetica, sans-serif;}
 </head>
 <body>
 
-<form action=""  method="post">
-<div style="max-width:400px;margin:auto">
- 
+  <div class="row" >
+    <div class="column" style="background-color: #f9f8fd">
+      <form action=""  method="post">
+        <div class="form">
   
-    <h1>Register</h1>
-    <p>Please fill in this form to create an account.</p>
-    <hr>
+
     {% csrf_token %}
-    <div class="input-icons">
-    <i class="fa fa-user icon"></i>
     <input class="input-field" type="text" placeholder="Username" name="username" placeholder="username" required><br><br>
-    </div>
-    <div class="input-icons">
-      <i class="fa fa-key icon"> </i>
-    <input class="input-field" type="password" id="password" name="password" placeholder="Password" required><br><br>
-    </div>
-
-    
-    <div class="input-icons">
-      <i class="fa fa-address-book-o icon"> </i>
-    <input class="input-field" type="name" id="name" name="name" placeholder="Name" required><br><br>
-</div>
-    <div class="input-icons">
-      <i class="fa fa-envelope icon">
-    </i>
-    <input class="input-field" type="email" id="email" name="email" placeholder="Email" required><br><br>
-    </div>
-
-    <div class="input-icons">
-      <i class="fa fa-phone icon">
-    </i>
-    <input  class="input-field" type="text" id="phone" name="phone" placeholder="Phone" required><br><br>
-    </div>
   
-     <div class="input-icons">
-      <i class="	fa fa-home icon" style="color:hsl(138, 43%, 48%)"></i>
-       <input class="input-field" type="text" id="address" name="address" required><br><br>
-    </div>
-    <label for="post">Patient or doctor:</label>
+    <input class="input-field" type="password" id="password" name="password" placeholder="Password" required><br><br>
+
+    <input class="input-field" type="name" id="name" name="name" placeholder="Name" required><br><br>
+   
+    <input class="input-field" type="email" id="email" name="email" placeholder="Email" required><br><br>
+   
+    <input  class="input-field" type="text" id="phone" name="phone" placeholder="Phone" required><br><br>
+ 
+    <input class="input-field" type="text" id="address" name="address" placeholder="address"  required><br><br>
+   
+    
     <select id="post" name="post" required>
         <option value="doctor">Doctor</option>
         <option value="patient">Patient</option>
     </select><br><br>
 
-    <label for="gender">Gender:</label>
-    <select id="gender" name="gender" required>
+    <select id="gender" name="gender" placeholder="gender" required>
         <option value="M">Male</option>
         <option value="F">Female</option>
     </select><br><br>
 
-    <label for="dob">Date of Birth:</label>
-    <input type="date" id="dob" name="dob" required><br><br>
-    <button type="submit">Register</button>
-  </div>
-</div>
+    <input type="date" id="dob" name="dob" placeholder="date od birth"><br><br>
+
+    <button type="submit">Register</button><br><br>
     <div class="container signin">
-      <p>Already have an account? <a href="/login">Sign in</a>.</p>
+      <p>Already have an account? <a href="{% url 'login' %}">Sign in</a>.</p>
     </div>
+  </div>
 </form>
+</div>
+
+</div>
 
 </body>
 </html>

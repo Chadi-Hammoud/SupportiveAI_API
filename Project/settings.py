@@ -9,20 +9,11 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-import environ
 import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-env = environ.Env()
-print(os.path.join(BASE_DIR, '.env'))
-# print(env('DATABASE_URL'))
-# environ.Env.read_env()
-env.read_env(os.path.join(BASE_DIR, '.env'))
-
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -39,9 +30,9 @@ EMAIL_USE_TLS = True
 SECRET_KEY = 'django-insecure-g4_@jalpeq7q#q3aqyrn5^a6fevlemomm)1j!sagkks#1061%x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -56,8 +47,10 @@ INSTALLED_APPS = [
     'modules',
     'rest_framework',
     "verify_email.apps.VerifyEmailConfig",
+   
 
 
+    
 ]
 
 MIDDLEWARE = [
@@ -68,7 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+     'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'Project.urls'
@@ -94,46 +87,10 @@ WSGI_APPLICATION = 'Project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-'''
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'usersDB', 
-        'USER': 'sammy', 
-        'PASSWORD': 'pa$$word',
-        'HOST': '127.0.0.1', 
-        'PORT': '5432',
-    }
-}
-'''
-
-# print(env('DATABASE_URL'))
-import dj_database_url
-# # DATABASES={
-# #         # 'default': dj_database_url.parse('postgres://supportiveai_user:Y8LEsDoz2kJr1WQ86j50lMGYR4esGy6n@dpg-ci2l4c67avj2t34mpl6g-a.ohio-postgres.render.com/supportiveai')
-# #         # 'default': dj_database_url.parse(env('DATABASE_URL'))
-# # }
-
-
-DATABASES = {
-    'default': dj_database_url.parse('postgres://supportiveai_user:Y8LEsDoz2kJr1WQ86j50lMGYR4esGy6n@dpg-ci2l4c67avj2t34mpl6g-a.ohio-postgres.render.com/supportiveai'),
-
-    'extra': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'SupportiveAI_DB',
-        'USER': 'admin',
-        'PASSWORD': 'Qa0ePLYX',
-        'HOST': 'mysql-131240-0.cloudclusters.net',
-        'PORT': '19397',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -169,7 +126,7 @@ USE_I18N = True
 USE_TZ = True
 
 EXPIRE_AFTER = "1d"
-MAX_RETRIES = 3
+MAX_RETRIES= 3
 
 
 # Static files (CSS, JavaScript, Images)
@@ -184,11 +141,11 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-
+     'django.contrib.auth.backends.ModelBackend',
+    
 
 ]
-APPEND_SLASH = False
+APPEND_SLASH=False
 
 
 CORS_ALLOWED_ORIGINS = [
