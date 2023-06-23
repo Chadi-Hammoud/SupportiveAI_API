@@ -1,6 +1,17 @@
 from django.shortcuts import render
 from django.contrib import auth
 from django.contrib.auth.tokens import default_token_generator
+import random
+import hashlib
+import io
+from datetime import datetime, timedelta
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.core.mail import EmailMessage
+from django.http import HttpResponse
+from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.models import Group
@@ -35,6 +46,7 @@ def home(request):
     return render(request, 'home.html', {"user": None})
 
 
+#INTEGRATION WITH MY CALENDLTY
 
 def mycalendly(request,user):
     print("enter mycal")
@@ -63,6 +75,8 @@ def mycalendlyregister(request,user):
     
     return render(request, 'mycalendlyregister.html', {"user": user})
 
+
+
 #register user in database
 class RegisterView(APIView):
     
@@ -72,66 +86,97 @@ class RegisterView(APIView):
 
     def post(self, request, format=None):
         type = request.data.get('post')
-        print(type)
         username = request.data.get('username')
         password = request.data.get('password')
-        email=request.data.get('email')
+        email = request.data.get('email')
 
         try:
             user = User.objects.get(username=username)
-            print(user)
-            print(username)
             return Response({'error': 'Username already exists.'}, status=status.HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:
-            user = User.objects.create_user(username=username,email=email, password=password)
-            print(user)
+            user = User.objects.create_user(username=username, email=email, password=password)
+
         if type == 'patient':
             serializer = PatientSerializer(data=request.data)
-            print(serializer)
-            if serializer.is_valid():  
+            if serializer.is_valid():
+                user.is_active = False
                 user.save()
-                user.is_active = False  # Set the user as inactive initially
                 serializer.save(username=user)
                 send_verification_email(request, user)
-                print("verfication sent")
-                print(get_verification_link(request,user))
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+                # Generate JWT token
+                refresh = RefreshToken.for_user(user)
+                token = {
+                    'refresh': str(refresh),
+                    'access': str(refresh.access_token),
+                    'exp': (datetime.utcnow() + timedelta(minutes=5)).strftime('%Y-%m-%d %H:%M:%S'),
+                }
+
+                response_data = {
+                    'username': username,
+                    'password': password,
+                    'name': serializer.validated_data.get('name'),
+                    'phone': serializer.validated_data.get('phone'),
+                    'address': serializer.validated_data.get('address'),
+                    'email': email,
+                    'dob': serializer.validated_data.get('dob'),
+                    'gender': serializer.validated_data.get('gender'),
+                    'post': 'patient',
+                    'token': token,
+                }
+
+                # return redirect('checkemail')
+                return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
+
             else:
-               return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             serializer = TherapistSerializer(data=request.data)
-            print(serializer)
             if serializer.is_valid():
+                user.is_active = False
                 user.save()
                 serializer.save(username=user)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-                
+                send_verification_email(request, user)
+
+                # Generate JWT token
+                refresh = RefreshToken.for_user(user)
+                token = {
+                    'refresh': str(refresh),
+                    'access': str(refresh.access_token),
+                    'exp': (datetime.utcnow() + timedelta(minutes=5)).strftime('%Y-%m-%d %H:%M:%S'),
+                }
+
+                response_data = {
+                    'username': username,
+                    'password': password,
+                    'name': serializer.validated_data.get('name'),
+                    'phone': serializer.validated_data.get('phone'),
+                    'address': serializer.validated_data.get('address'),
+                    'email': email,
+                    'dob': serializer.validated_data.get('dob'),
+                    'gender': serializer.validated_data.get('gender'),
+                    'post': 'therapist',
+                    'token': token,
+                }
+
+                # return redirect('checkemail')
+                return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
+
             else:
-               return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+#LOGIN FOR PATIENT OR DOCTOR    
+from django.shortcuts import render, redirect
+from django.contrib import auth
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+from .serializers import LoginSerializer
+from .models import Patient, Therapist
 
-
-import io
-from django.core.mail import EmailMessage
-from django.http import HttpResponse
-from django.template.loader import render_to_string
-
-
-
-def send_verification_email(request, user):
-  
-    mail_subject = 'Verify your email'
-    message = get_verification_link(request, user)
-    print(message)
-    send_to=[user.email]
-    email=EmailMessage(mail_subject, message, 'farahhtout15@example.com', send_to)
-    email.send()
-    return HttpResponse('Email sent successfully!')
-
-
-#log in       
 class LoginView(APIView):
-    
+
     def get(self, request, format=None):
         return render(request, 'login.html')
 
@@ -140,36 +185,70 @@ class LoginView(APIView):
         print(serializer)
         if serializer.is_valid():
             uname = serializer.validated_data['username']
-            print(uname)
             pwd = serializer.validated_data['password']
-            print(pwd)
             user_authenticate = auth.authenticate(username=uname, password=pwd)
-            print(user_authenticate)
             if user_authenticate is not None:
                 user = User.objects.get(username=uname)
                 try:
-                    print(user)
                     data = Patient.objects.get(username=user)
-                    print(data)
-                    print('Patient has been Logged')
                     auth.login(request, user_authenticate)
-                    return redirect('dash', user="P")
+
+                    # Generate JWT token
+                    refresh = RefreshToken.for_user(user_authenticate)
+                    token = str(refresh.access_token)
+
+                    response_data = {
+                        "message": "success",
+                        "data": {
+                            "Id": data.id,
+                            "Name": data.name,
+                            "Email": data.email,
+                            "Token": token
+                        }
+                    }
+
+                    # return redirect('dash', user='P')
+                    return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
+
                 except Patient.DoesNotExist:
                     try:
                         data = Therapist.objects.get(username=user)
                         print('therapist has been Logged')
                         auth.login(request, user_authenticate)
-                        return redirect('mycalendlyregister',user=user.id)
+                        # Generate JWT token
+                        refresh = RefreshToken.for_user(user_authenticate)
+                        token = str(refresh.access_token)
+
+                        response_data = {
+                            "message": "success",
+                            "data": {
+                                "Id": data.id,
+                                "Name": data.name,
+                                "Email": data.email,
+                                "Token": token
+                            }
+                        }
+                        # return redirect('mycalendlyregister', user=user.id)
+                        return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
+
                     except Therapist.DoesNotExist:
-                        return redirect('/')
+                        response_data = {
+                            "message": "invalid username or password",
+                            "data": None
+                        }
+                        return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
             else:
-                print('Login Failed')
-                return render(request, 'login.html')
+                response_data = {
+                    "message": "invalid username or password",
+                    "data": None
+                }
+                return Response(response_data ,status=status.HTTP_401_UNAUTHORIZED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-#just for trying the login
+
+#DASHBOARD 
 
 def dash(request, user):
    
@@ -196,6 +275,19 @@ def dash(request, user):
         return redirect('mycalendly',user=user1.id)
     return render(request, 'dash.html', {'user': user, 'data': data,'doctors':doctors})
 
+#EMAIL VERIFICATION
+
+#send email verification for patient
+
+def send_verification_email(request, user):
+    mail_subject = 'Verify your email'
+    message = get_verification_link(request, user)
+    print(message)
+    send_to=[user.email]
+    email=EmailMessage(mail_subject, message, 'farahhtout15@example.com', send_to)
+    email.send()
+    return HttpResponse('Email sent successfully!')
+
 #generate a link for account verification based on userid and token
 def get_verification_link(request, user):
     uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -217,10 +309,73 @@ def verify_email(request, uidb64, token):
         return HttpResponse('verification_success, you can exit here end login to site')
     else:
         return HttpResponse('verification_failure')
+
+
+#RESET PASSWORD     
         
+#reset password email verif send
+def send_reset_pass(request, user,number):
+    print("send reset pass")
+    mail_subject = "Reset Your Password"
+    #message = get_reset_link(request,user,password)
+    message = str(number)  
+    send_to=[user.email]
+    email=EmailMessage(mail_subject, message, 'farahhtout15@example.com', send_to)
+    email.send()
+    return HttpResponse('Email sent successfully!')
 
 
 
+def forget(request):
+    if request.method == "POST":
+        email = request.POST['email']
+        try:
+            user = User.objects.get(email=email)
+            number=random.randint(1000, 9999)
+            hashed_number = hash_number(number)
+            send_reset_pass(request, user, number)
+            return redirect('codeVerif',user,hashed_number)
+            
+        except User.DoesNotExist:
+            # Handle the case where the user with the provided email doesn't exist
+            return HttpResponse('User does not exist.')
+    return render(request,'forget.html')
+
+def codeVerif(request,user,hashed_number):
+    user = User.objects.get(username=user)
+    if request.method=="POST":
+        numb=request.POST['code']
+        numbhash=hash_number(numb)
+        if numbhash==hashed_number:
+            return redirect('changepass',user)
+        else: 
+            return HttpResponse("the code is not true")
+    return render(request,'codeVerif.html')
+
+
+   
+        
+def changepass(request,user):
+    print("changepass")
+    user = User.objects.get(username=user)
+    print(user)
+    if request.method=="POST":
+        password=request.POST['password']
+        print(password)
+        user.set_password(password)
+        user.save()
+        return HttpResponse("your pass is changed")
+
+    return render(request,'changepass.html')
 
 
 
+def hash_number(number):
+    hashed_number = hashlib.sha256(str(number).encode()).hexdigest()
+    return hashed_number
+
+
+
+#remind the user to check his email and verify before login
+def checkemail(request):
+    return render(request,'checkemail.html')
