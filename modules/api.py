@@ -92,7 +92,8 @@ class LoginViewApi(APIView):
                             "Id": data.id,
                             "Name": data.name,
                             "Email": data.email,
-                            "Token": token
+                            "Token": token,
+                            "usertype":'patient'
                         }
                     }
 
@@ -114,7 +115,8 @@ class LoginViewApi(APIView):
                                 "Id": data.id,
                                 "Name": data.name,
                                 "Email": data.email,
-                                "Token": token
+                                "Token": token,
+                                "usertype":'doctor'
                             }
                         }
                         # return redirect('mycalendlyregister', user=user.id)
