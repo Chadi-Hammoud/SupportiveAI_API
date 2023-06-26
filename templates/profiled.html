@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profDoctor.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+    <h1>Profile</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="{{ user.username }}" required>
+        </div>
+        <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ doctor.name }}" required>
+        </div>
+        <div>
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" name="phone" value="{{ doctor.phone }}" required>
+        </div>
+        <div>
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" value="{{ doctor.address }}" required>
+        </div>
+        <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ doctor.email }}" required>
+        </div>
+        <div>
+          
+          <label for="gender">Gender:</label>
+          {% if doctor.gender == 'F' %}
+          <input type="text" id="gender" name="gender" value='female' required>
+          {% else %}
+          <input type="text" id="gender" name="gender" value='Male' required>
+          {% endif %}
+    
+        </div>
+        <div>
+
+        <label for="dob">Date of Birth:</label>
+      
+        <input type="text" id="dob" name="dob" value="{{ doctor.dob|date:'Y-m-d' }}" required>
+        </div>
+        <div>
+          <label for="link">Calnendly link:</label>
+          <input type="link" id="link" name="link" value="{{ doctor.Therapist_link }}" required>
+          </div>
+        <p><a href="/forget/">Change your password</a></p>
+        <div style="text-align: center; margin-top: 20px;">
+            <input type="submit" value="Update">
+        </div>
+ 
+
+    </form>
+</body>
+</html>

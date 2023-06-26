@@ -1,19 +1,113 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-{% include 'navbar.html' %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<title>W3.CSS Template</title>
-<meta charset="UTF-8">
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
 
+    <title>Splash Image</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        
+        * {
+            box-sizing: border-box;
+            font-family: 'Merriweather', serif;       
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .image {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .content {
+            background-color: #fff;
+            /* border: 2px solid #3f166a;
+            border-radius: 50px; */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+            flex: 1;
+            text-align: center;
+            margin: 20px;
+            color: rgb(97, 97, 97);
+            padding: 40px;
+        }
+
+        .content p {
+            font-size: 90px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            
+        }
+
+        .content a.button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 40px;
+            font-size: 40px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #617ca6;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .content a.button:hover {
+            background-color: #e391c0;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .image,
+            .content {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="image">
+            <img src="{% static 'images/logo.jpg' %}"  alt="Splash">
+        </div>
+        <div class="content">
+            <p>WELCOME<br>TO</p>
+            <a href="/register/" class="button">BLOOM</a>
+        </div>
+    </div>
 </body>
+
 </html>

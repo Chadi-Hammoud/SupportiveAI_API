@@ -1,55 +1,34 @@
-
-
+{% load static %}
 <!DOCTYPE html>
 <html>
-<head>
-<style>
-
-body {
-  margin: 0;
-}
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  width: 25%;
-  background-color: #f1f1f1;
-  position: fixed;
-  height: 100%;
-  overflow: auto;
-}
-
-li a {
-  display: block;
-  color: #000;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-li a.active {
-  background-color: #04AA6D;
-  color: white;
-}
-
-li a:hover:not(.active) {
-  background-color: #555;
-  color: white;
-}
-</style>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">
+    <title>Document</title>
 </head>
-<body>
-  
-<ul>
 
-  <li><a class="active" href="#home">Home</a></li>
-  <li><a href="/login">login</a></li>
-  <li><a href="/register">register</a></li>
-  <li><a href="#about">About</a></li>
-</ul>
+<header>
+  <div class="container">
+    <div class="logo-box">
+      <a href="#logo" class="logonav"><img class="logonav" src="{% static 'images/logo.jpg' %}" alt="logo" height="70px">
+  </div>
+      <nav>
+          <ul>
+            {% if request.user.is_anonymous or not request.user.is_authenticated %}
 
-
-
-</body>
-</html>
-
+            <li><a href="/register/">REGISTER</a></li>
+              <li><a href="">CHATBOT</a></li>
+              <li><a href="/searchdr/">MY DR</a></li>
+              <li><a href="{% url 'profilep'  %}">PROFILE</a></li>  
+             
+              {% else %}
+              <li><a href="">CHATBOT</a></li>
+              <li><a href="/searchdr/">MY DR</a></li>
+              <li><a href="{% url 'profilep'  %}">PROFILE</a></li>  
+              <li><a href="/logout/">LOGOUT</a></li>
+              {% endif %}
+          </ul>
+      </nav>
+  </div>
+</header>

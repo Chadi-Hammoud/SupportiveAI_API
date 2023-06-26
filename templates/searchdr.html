@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/appoin.css' %}">
+    <title>Appointment Page</title>
+</head>
+
+<body>
+
+    <section class="SearchDiv">
+      
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Find your DR">
+            <button id="search-btn">Search</button>
+        </div>
+        
+    </section>
+    <main>
+
+    <div class="container">
+        {% for dr in doctors %}
+        <div class="doctor-container">
+            <div class="doctor-img">
+                {% if dr.name == 'farah'%}
+                <img src="{% static 'images/1.jpg' %}" alt="Doctor 1">
+                {% elif dr.name == 'chadi'%}
+                <img src="{% static 'images/2.webp' %}" alt="Doctor 2" >
+                {% elif dr.name == 'hasan'%}
+                <img src="{% static 'images/3.jpg' %}" alt="Doctor 3" >
+                {% elif dr.name == 'kinda'%}
+                <img src="{% static 'images/4.jpg' %}" alt="Doctor 4" >
+                {% elif dr.name == 'sarah'%}
+                <img src="{% static 'images/5.jpg' %}" alt="Doctor 5" >
+                {% endif %}
+            </div>
+            <div class="doctor-details">
+                <h3>Dr. {{ dr.name }}</h3>
+                <p>Specialty: Cardiology</p>
+                
+<a href="{% url 'mycalendly' user=dr.username.id %}">
+            <button class="book-btn">Book Appointment</button></a>
+            </div>
+    
+        </div>
+        {% endfor %}
+    
+    
+        <!-- Add more doctor containers as needed -->
+    </div>
+    <div class="container">
+        <!-- Doctor containers -->
+    
+        <!-- Add the message container -->
+        <div id="message-container"></div>
+    </div>
+    </main>
+    <script>
+
+
+
+const searchBtn = document.getElementById('search-btn');
+const searchInput = document.getElementById('search-input');
+const messageContainer = document.getElementById('message-container');
+
+searchBtn.addEventListener('click', performSearch);
+searchInput.addEventListener('keyup', function (event) {
+  if (event.key === 'Enter') {
+    performSearch();
+  }
+});
+
+function performSearch() {
+  const searchQuery = searchInput.value.trim().toLowerCase();
+  const doctorContainers = document.querySelectorAll('.doctor-container');
+  let doctorFound = false;
+
+  doctorContainers.forEach(container => {
+    const doctorName = container.querySelector('.doctor-details h3').textContent.toLowerCase();
+
+    if (doctorName.includes(searchQuery)) {
+      container.style.display = 'block';
+      doctorFound = true;
+    } else {
+      container.style.display = 'none';
+    }
+  });
+
+  if (!doctorFound) {
+    showMessage('No doctors found for the given name');
+  } else {
+    hideMessage();
+  }
+}
+
+function showMessage(message) {
+  messageContainer.textContent = message;
+  messageContainer.classList.add('show');
+}
+
+function hideMessage() {
+  messageContainer.classList.remove('show');
+}
+</script>
+
+</body>
+
+</html>

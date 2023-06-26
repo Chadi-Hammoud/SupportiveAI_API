@@ -1,0 +1,128 @@
+{% load static %}<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Manage appoin </title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .h1 {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 30px;
+            color: #3f166a;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+        
+            box-shadow: 10px 10px 25px #d6d5f9;
+        }
+
+        .qr-code {
+            flex: 1;
+            padding: 60px;
+            background-color: #3f166a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+
+        .qr-code img {
+            max-width: 80%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #f9f9f9;
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        .content p {
+            font-size: 25px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .content a {
+            display: inline-block;
+            padding: 12px 24px;
+            margin-bottom: 15px;
+            color: #3f166a;
+            border: 1px solid #3f166a;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .content a:hover {
+            background-color: #3f166a;
+            color: #fff;
+            
+            border: 1px solid #3f166a;
+
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .qr-code,
+            .content {
+                padding: 40px;
+                border-radius: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'navbard.html' %}
+    
+    <div class="h1">
+        <h1>Stay on Top of Your Schedule</h1>
+    </div>
+    <div class="container">
+        <div class="qr-code">
+            <img src="{% static 'images/qrcode.png' %}" alt="QR Code">
+        </div>
+        <div class="content">
+            <p>You can see your profile here:</p>
+            <a href="{% url 'profiled'  %}">{{data.name}}</a>
+            <P>Use this link to view your appointments:</P>
+            <a href="https://calendly.com/app/scheduled_events/user/me">Appointments</a>
+        </div>
+    </div>
+</body>
+
+</html>
+
+</body>
+</html>

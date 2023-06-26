@@ -1,33 +1,121 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<title>W3.CSS Template</title>
-<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}"> 
+       <title>Home</title>
 
 </head>
 <body>
-<p>name:{{data.name}}
-    <br>
-    email={{data.email}}
-</p>
-<form method="POST" action="">
-    {% csrf_token %}
-<label for="doctor">Select doctor:</label>
-    <select id="doctor" name="doctor" required>
-{% for dr in doctors %}
-        <option value={{dr}}>{{dr}}</option> 
-{% endfor %}
+    {% include 'navbar.html' %}
 
-</select><br><br>
-<input type="submit" value="submit"/>
-</form>
+    <section class="fsec" id="fsec">
+        <div id="content">
+            <h1 class="fh1">BLOOM</h1>
+            <p class="fpara">
+                Nurturing Mental Health for a Flourishing World. We understand the vital importance of mental health, which
+                is
+                why we have created this website as a platform to provide support, guidance, and a sense of community. In
+                addition to our website, we have developed a mobile app that allows you to access our resources, connect
+                with
+                our community, and receive personalized mental health support anytime, anywhere.
+            </p>
+            <a href="#mobile" class="cta">BLOOM APP</a>
+        </div>
+        <div class="fimg-container">
+            <img class="fimg" src="{% static 'images/home1.jpg' %}"  alt="Bloom Image" />
+        </div>
+    </section>
+
+    <section class="bloc">
+        <div class="im">
+            <img class="simag" src="{% static 'images/home3.png' %}"/>
+        </div>
+        <div class="drs">
+            <h1 class="Tdoctors">
+                OUR DOCTORS
+            </h1>
+            <p class="spara">
+                If you are struggling with a mental
+                health issue or are simply looking
+                for ways to improve your overall
+                well-being, a psychologist can be a
+                valuable resource. Our
+                psychologists are trained
+                professionals who can provide you
+                with the support and guidance you
+                need to live a healthy and fulfilling
+                life.
+            </p>
+        </div>
+    </section>
+
+    <section class="tbloc">
+        <div>
+            <img class="timag" id="timg" alt="image" src="{% static 'images/home4.png' %}" />
+        </div>
+        <div class="tsec">
+            <p class="tpara">
+                “You don't have to be positive all the time. It's perfectly okay to feel sad, angry, annoyed, frustrated,
+                scared and
+                anxious. Having feelings doesn't make you a negative person. It makes you human.”
+            </p>
+        </div>
+    </section>
+
+
+    <section class="fbloc">
+        <div>
+            <img class="foimag"src="{% static 'images/home2.png' %}" />
+        </div>
+        <div class="fodrs">
+            <h1 class="fdoctors">
+                OUR MISSION
+            </h1>
+            <p class="f0para">
+                "Our mission at Bloom is to empower individuals on their journey towards mental well-being. We strive to
+                cultivate
+                resilience, guide the search for balance, and provide a nurturing environment for personal growth. Together,
+                let's
+                foster a community that supports and uplifts one another, allowing each person to blossom into their best
+                selves. Join
+                us as we nurture mental well-being and inspire each other to bloom."
+            </p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3 class="footer-title">About Us</h3>
+                <p class="footer-text"> BLOOM for mental health care </p>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">Contact</h3>
+                <p class="footer-text">Email: BLOOM@gmail.com</p>
+                <p class="footer-text">Phone: +1 123 456 7890</p>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">Follow Us</h3>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="footer-text">© 2023 BLOOM . All rights reserved.</p>
+        </div>
+    </footer>
+
+
+
+
+
+    
 </body>
 </html>
